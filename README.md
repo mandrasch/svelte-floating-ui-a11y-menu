@@ -1,38 +1,35 @@
-# create-svelte
+🚧 Work in progress 🚧
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Try to build accessible dropdown menus / navigation bars with SvelteKit and [floating ui](https://floating-ui.com/). Floating UI takes care of positioning dropdowns.
 
-## Creating a project
+Based on https://w3c.github.io/aria-practices/examples/menubar/menubar-navigation.html
 
-If you're seeing this, you've probably already done this step. Congrats!
+Experimental, do not use this in production without serious a11y testing!
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Local setup
 
-# create a new project in my-app
-npm create svelte@latest my-app
+- `npm install`
+- `npm run dev -- --open`
+
+## TODOs
+
+- [ ] Test with screenreader(s)!
+- [ ] Get feedback by a11y experts
+- [ ] Set focus properly
+- [ ] Exit menu on escape key
+- [ ] Add collapsible mobile menu
+
+## Resources
+
+- Context: https://github.com/picocss/pico/issues/330
+- https://w3c.github.io/aria-practices/examples/menubar/menubar-navigation.html
+- Maybe relevant in future: https://github.com/jguze/svelte-easy-popover/pull/4
+- For Vanilla JS: https://github.com/NickDJM/accessible-menu
+
+## How was this created
+
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+npm create svelte@latest .
+npm install @floating-ui/dom
+npm i @picocss/pico sass svelte-preprocess
 ```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.

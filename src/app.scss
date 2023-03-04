@@ -1,0 +1,10 @@
+/* https://picocss.com/docs/customization.html */
+/* Custom Teal version */
+
+// Override default variables
+$primary-500: #009688;
+$primary-600: #00897b;
+$primary-700: #00796b;
+
+// Import Pico
+@import '@picocss/pico/scss/pico';
