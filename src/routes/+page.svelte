@@ -25,8 +25,7 @@
 
 <h2>SvelteKit + floating-ui a11y menus</h2>
 <p>
-	Based on https://w3c.github.io/aria-practices/examples/menubar/menubar-navigation.html +
-	floating-ui. With basic support for Svelte transitions.
+	See <a href="https://github.com/mandrasch/sveltekit-floatingui-a11y-menu">GitHub</a>.
 </p>
 
 <h3>Hover + click:</h3>

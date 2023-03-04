@@ -2,7 +2,7 @@
 
 Try to build accessible dropdown menus / navigation bars with SvelteKit and [floating ui](https://floating-ui.com/). Floating UI takes care of positioning dropdowns.
 
-Based on https://w3c.github.io/aria-practices/examples/menubar/menubar-navigation.html
+Based on https://w3c.github.io/aria-practices/examples/menubar/menubar-navigation.html, but I'll convert it to https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html.
 
 Experimental, do not use this in production without serious a11y testing!
 
@@ -13,11 +13,13 @@ Experimental, do not use this in production without serious a11y testing!
 
 ## TODOs
 
+- [ ] Use source code of https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html
+- [ ] Add collapsible mobile menu
+- [ ] Add example where link and dropdown toggle are separated so that parent link can be clicked
 - [ ] Test with screenreader(s)!
 - [ ] Get feedback by a11y experts
 - [ ] Set focus properly
 - [ ] Exit menu on escape key
-- [ ] Add collapsible mobile menu
 
 ## Resources
 
