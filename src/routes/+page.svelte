@@ -23,10 +23,10 @@
 	import NavigationClickOnly from '../components/NavigationClickOnly.svelte';
 </script>
 
-<h2>Just a demo with floating-ui</h2>
+<h2>SvelteKit + floating-ui a11y menus</h2>
 <p>
 	Based on https://w3c.github.io/aria-practices/examples/menubar/menubar-navigation.html +
-	floating-ui
+	floating-ui. With basic support for Svelte transitions.
 </p>
 
 <h3>Hover + click:</h3>
