@@ -25,6 +25,8 @@
 
 <div class="container" style="margin-top:30px;"><h3>Click only:</h3></div>
 
+<p>🚧 Not mobile/touch-optimized yet. 🚧</p>
+
 <DisclosureNavigation useHoverActions={false} />
 
 <div class="container">
