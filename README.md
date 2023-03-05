@@ -1,6 +1,6 @@
 🚧 Work in progress 🚧
 
-Try to build accessible dropdown menus / navigation bars with Svelte(Kit) and [floating ui](https://floating-ui.com/). Floating UI takes care of positioning dropdowns.
+Trying to build accessible dropdown menus / navigation bars with Svelte(Kit) and [Floating UI](https://floating-ui.com/). Floating UI takes care of positioning dropdowns.
 
 Based on https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html.
 
@@ -20,8 +20,7 @@ Experimental, do not use this in production without serious a11y testing!
 - [ ] Test with screenreader(s)!
 - [ ] Get feedback by a11y experts
 - [ ] Set focus properly
-- [ ] Exit menu on escape key
--
+- [ ] Fix contrast errors
 
 ## Technical
 

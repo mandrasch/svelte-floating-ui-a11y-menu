@@ -249,4 +249,11 @@
 		display: flex;
 		flex-direction: column;
 	}
+
+	/* just some styling, remove default button styles by picocss */
+	ul.disclosure-nav button {
+		background: none;
+		border: none;
+		color: var(--primary);
+	}
 </style>
