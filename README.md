@@ -13,6 +13,7 @@ Live demo: https://svelte-floating-ui-a11y-menu.vercel.app/
 ## TODOs
 
 - [ ] Use source code of https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html
+- [ ] Add https://www.npmjs.com/package/svelte-click-outside for closing
 - [ ] Add collapsible mobile menu
 - [ ] Add example where link and dropdown toggle are separated so that parent link can be clicked
 - [ ] Implement other patterns
