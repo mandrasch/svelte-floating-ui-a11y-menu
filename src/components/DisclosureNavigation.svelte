@@ -1,7 +1,7 @@
 <script>
 	// Only needed for {#if}, currently not used
-	import { tick } from 'svelte';
-	import { fade, fly } from 'svelte/transition';
+	//import { tick } from 'svelte';
+	// import { fade, fly } from 'svelte/transition';
 
 	// floating-ui
 	import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
