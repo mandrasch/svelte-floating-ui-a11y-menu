@@ -14,7 +14,11 @@
 		<a href="https://github.com/mandrasch/sveltekit-floating-ui-a11y-menu">GitHub</a> for all details.
 	</p>
 	<p>🚧 Work in progress, do not use in production without testing! 🚧</p>
+</div>
+
+<div class="container" style="margin-top:30px;">
 	<h3>Hover (mouseenter) and click:</h3>
+	<p>🚧 Not mobile/touch-optimized yet. 🚧</p>
 </div>
 
 <DisclosureNavigation useHoverActions={true} />
@@ -24,8 +28,6 @@
 </div>
 
 <div class="container" style="margin-top:30px;"><h3>Click only:</h3></div>
-
-<p>🚧 Not mobile/touch-optimized yet. 🚧</p>
 
 <DisclosureNavigation useHoverActions={false} />
 
