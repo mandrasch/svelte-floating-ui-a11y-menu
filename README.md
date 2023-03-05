@@ -1,7 +1,7 @@
 🚧 Work in progress 🚧
 
 - Trying to build accessible dropdown menus / navigation bars with Svelte(Kit) and [Floating UI](https://floating-ui.com/).
-  - Floating UI takes care of positioning dropdowns / popovers (https://blog.logrocket.com/popper-vs-floating-ui/)
+  - Floating UI takes care of positioning dropdowns / popovers. It only detects resizing / scroll actions and positions dropdowns / popovers accordingly (https://blog.logrocket.com/popper-vs-floating-ui/)
 - Based on https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/.
 - Experimental, do not use this in production without serious a11y testing!
 
@@ -14,7 +14,9 @@ Live demo: https://svelte-floating-ui-a11y-menu.vercel.app/
 
 ## TODOs
 
-- [ ] Use source code of https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html
+- [ ] Goal: Make hover work on iPads / big touch screen as well without need of collapsing the menu?
+- [ ] Read https://adrianroselli.com/2019/06/link-disclosure-widget-navigation.html
+- [ ] Use all keyboard events of https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html
 - [ ] Add https://www.npmjs.com/package/svelte-click-outside for closing
 - [ ] Add collapsible mobile menu
 - [ ] Add example where link and dropdown toggle are separated so that parent link can be clicked

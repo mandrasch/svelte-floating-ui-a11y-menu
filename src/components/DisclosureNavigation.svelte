@@ -19,6 +19,7 @@
 	let currentSelectedDropdownToggle;
 	let currentSelectedDropdownContent;
 	let currentSelectedDropdownAutoUpdateFn = function () {}; // for clean up later
+	let autoUpdateFns = [];
 
 	// https://floating-ui.com/docs/autoUpdate
 
@@ -28,6 +29,7 @@
 			placement: 'bottom',
 			middleware: [offset(0), flip(), shift({ padding: 5 })]
 		}).then(({ x, y }) => {
+			console.log('result:', { x, y });
 			Object.assign(currentSelectedDropdownContent.style, {
 				left: `${x}px`,
 				top: `${y}px`
@@ -35,25 +37,18 @@
 		});
 	}
 
-	async function toggleDropdownByClick(evt, menuName) {
-		console.log('toggleDropdownByClick()', { menuName, activeMenu, target: evt.target });
-
-		// TODO: clashes with openByClick() - how to bundle / synchronize them?
-		if (menuSettings.useHoverActions === true) {
-			console.log('toggleDropdownByClick() - exit, hover actions will take care');
-			return; // bail
-		}
+	function toggleSubmenu(menuName, evt) {
+		// destroy / remove previous auto update listener
+		currentSelectedDropdownAutoUpdateFn();
+		currentSelectedDropdownAutoUpdateFn = function () {}; // reset
 
 		if (activeMenu !== menuName) {
-			// Show submenu
-			console.log('toggleDropdownByClick()', 'show submenu');
+			// show sub menu
 			activeMenu = menuName;
 
-			// Wait for animations / template changes by Svelte {#if}
-			// Currently not used because we want to keep submenus in DOM
-			// await tick();
-
-			// update element refs
+			// floatingUI: start an update listener which will
+			// recompute positioning after windows is resized
+			// https://floating-ui.com/docs/autoupdate
 			currentSelectedDropdownToggle = evt.target;
 			currentSelectedDropdownContent = evt.target
 				.closest('li')
@@ -62,8 +57,8 @@
 			if (currentSelectedDropdownContent === null) {
 				console.error('Could not find ul-submenu in target area:', evt.target.closest('li'));
 			}
-
 			console.log({ currentSelectedDropdownToggle, currentSelectedDropdownContent });
+
 			// https://floating-ui.com/docs/autoUpdate, returns fn to destroy later
 			currentSelectedDropdownAutoUpdateFn = autoUpdate(
 				currentSelectedDropdownToggle,
@@ -72,56 +67,42 @@
 				computeBestPositionForDropdownContent
 			);
 		} else {
-			console.log('hide submenu');
-			// hide submenu
+			// close submenu
 			activeMenu = '';
-			// destroy / remove auto update listener
-			currentSelectedDropdownAutoUpdateFn(); // https://floating-ui.com/docs/autoUpdate
 		}
 	}
 
-	async function openDropdownByHover(evt, menuName) {
-		console.log('openDrodownByHover()', { evt, menuName });
+	// click (not touch)
+	async function handleDropdownClick(evt, menuName) {
+		console.log('[handleDropdownClick()]', { menuName, activeMenu, target: evt.target });
+		toggleSubmenu(menuName, evt);
+	}
+
+	// On mobile side calling preventDefault in touchstart event prevents mouseover,
+	// mouseenter, mousedown and affiliated events (we use on:touchstart|preventDefault)
+	function handleDropdownTouchstart(evt, menuName) {
+		console.log('[handleDropdownTouchstart()]', { evt, menuName });
+		toggleSubmenu(menuName, evt);
+	}
+
+	async function handleDropdownMouseenter(evt, menuName) {
+		console.log('[handleDropdownMouseenter()]', {
+			evt,
+			relatedTarget: evt.relatedTarget,
+			menuName
+		});
 		if (menuSettings.useHoverActions === false) {
-			console.log('openDrodownByHover() - exit no hover actions activated');
+			console.log('handleDropdownMouseenter() - exit no hover actions activated');
 			return; // bail
 		}
 
-		// TODO: bundle this in openMenu()
-		// if hover actions are permitted:
-		activeMenu = menuName;
-
-		// Wait for animations / template changes by Svelte {#if}
-		// Currently not used because we want to keep submenus in DOM
-		// await tick();
-
-		// update element refs
-		currentSelectedDropdownToggle = evt.target;
-		currentSelectedDropdownContent = evt.target
-			.closest('li')
-			.querySelector('ul.disclosure-nav__submenu');
-		if (currentSelectedDropdownContent === null) {
-			console.error('Could not find ul-submenu in target area:', evt.target.closest('li'));
-		}
-
-		console.log(
-			'openDrodownByHover()',
-			currentSelectedDropdownToggle,
-			currentSelectedDropdownContent
-		);
-
-		// https://floating-ui.com/docs/autoUpdate
-		currentSelectedDropdownAutoUpdateFn = autoUpdate(
-			currentSelectedDropdownToggle,
-			currentSelectedDropdownContent,
-			// TODO: Can i pass arguments here?
-			computeBestPositionForDropdownContent
-		);
+		toggleSubmenu(menuName, evt);
 	}
 
-	function closeDropdownByMouseLeave(evt) {
+	function handleDropdownMouseleave(evt) {
 		if (menuSettings.useHoverActions === false) return; // bail
-
+		currentSelectedDropdownAutoUpdateFn(); // destroy previous watcher
+		currentSelectedDropdownAutoUpdateFn = function () {};
 		console.log('mouseLeave');
 		activeMenu = '';
 	}
@@ -134,6 +115,44 @@
 			console.log('Escape key triggered, close active menu (if open)');
 			activeMenu = '';
 		}
+	}
+
+	function handleOutsideClick(evt) {
+		// console.log('Outside click', { evt, target: evt.target });
+		// if outside click was outside of current menu
+		if (evt.target.isEqualNode(currentSelectedDropdownToggle)) {
+			console.log('Outside click on current menu detected, resetting / closing it it', {
+				target: evt.target,
+				currentSelectedDropdownToggle
+			});
+			activeMenu = '';
+			currentSelectedDropdownAutoUpdateFn(); // destroy previous update watcher
+		} else {
+			('Outside click not on current meu');
+		}
+		//activeMenu = '';
+		// currentSelectedDropdownAutoUpdateFn(); // destroy previous update watcher
+	}
+	// https://svelte.dev/repl/ae791a22dcd14f40bc56d12f2c63c002?version=3.55.1
+	export function clickOutside(node) {
+		// the node has been mounted in the DOM
+
+		window.addEventListener('click', handleClick);
+
+		function handleClick(e) {
+			console.log({ node, target: e.target });
+			if (!node.contains(e.target) || !node.equals(e.target)) {
+				console.log('DISPATCHING!', { node, target: e.target });
+				node.dispatchEvent(new CustomEvent('outsideclick'));
+			}
+		}
+
+		return {
+			destroy() {
+				// the node has been removed from the DOM
+				window.removeEventListener('click', handleClick);
+			}
+		};
 	}
 </script>
 
@@ -149,13 +168,19 @@
 				<a href="#home"> Home </a>
 			</li>
 			<!-- https://svelte.dev/tutorial/inline-handlers -->
-			<li on:mouseleave={(evt) => closeDropdownByMouseLeave(evt)}>
+			<li on:mouseleave={(evt) => handleDropdownMouseleave(evt)}>
+				<!-- important, use |stopPropagation|preventDefault otherwise events will be triggered twice (e.g. click mobile => mouseenter) -->
+				<!-- important:On mobile side calling preventDefault in touchstart event prevents mouseover, mouseenter, mousedown and affiliated events https://stackoverflow.com/a/37130354-->
 				<button
 					type="button"
 					aria-controls="submenu_news"
 					aria-expanded={activeMenu === 'news'}
-					on:click|stopPropagation={(evt) => toggleDropdownByClick(evt, 'news')}
-					on:mouseenter={(evt) => openDropdownByHover(evt, 'news')}
+					on:touchstart|preventDefault={(evt) => handleDropdownTouchstart(evt, 'news')}
+					on:click|stopPropagation|preventDefault={(evt) => handleDropdownClick(evt, 'news')}
+					on:mouseenter|stopPropagation|preventDefault={(evt) =>
+						handleDropdownMouseenter(evt, 'news')}
+					use:clickOutside
+					on:outsideclick={handleOutsideClick}
 					>News
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -167,28 +192,26 @@
 						<polygon points="1 0, 11 0, 6 8" />
 					</svg></button
 				>
-				<ul
-					id="submenu_news"
-					class="disclosure-nav__submenu"
-					class:hide={activeMenu !== 'news'}
-					in:fly={{ y: -10 }}
-					out:fly={{ y: -10 }}
-				>
+				<ul id="submenu_news" class="disclosure-nav__submenu" class:hide={activeMenu !== 'news'}>
 					<li>
-						<a href="#overview"> Overview </a>
+						<a href="overview"> Overview </a>
 					</li>
 					<li>
 						<a href="#administration"> Tech news </a>
 					</li>
 				</ul>
 			</li>
-			<li on:mouseleave={(evt) => closeDropdownByMouseLeave(evt)}>
+			<li on:mouseleave={(evt) => handleDropdownMouseleave(evt)}>
 				<button
 					type="button"
 					aria-controls="submenu_about"
 					aria-expanded={activeMenu === 'about'}
-					on:click={(evt) => toggleDropdownByClick(evt, 'about')}
-					on:mouseenter={(evt) => openDropdownByHover(evt, 'about')}
+					on:touchstart|stopPropagation|preventDefault={(evt) =>
+						handleDropdownTouchstart(evt, 'about')}
+					on:click|stopPropagation|preventDefault={(evt) => handleDropdownClick(evt, 'about')}
+					on:mouseenter={(evt) => handleDropdownMouseenter(evt, 'about')}
+					use:clickOutside
+					on:outsideclick={handleOutsideClick}
 					>About
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -200,13 +223,7 @@
 						<polygon points="1 0, 11 0, 6 8" />
 					</svg></button
 				>
-				<ul
-					id="submenu_about"
-					class="disclosure-nav__submenu"
-					class:hide={activeMenu !== 'about'}
-					in:fly={{ y: -10 }}
-					out:fly={{ y: -10 }}
-				>
+				<ul id="submenu_about" class="disclosure-nav__submenu" class:hide={activeMenu !== 'about'}>
 					<li>
 						<a href="#overview"> Our organisation </a>
 					</li>

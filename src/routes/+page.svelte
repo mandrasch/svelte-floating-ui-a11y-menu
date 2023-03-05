@@ -17,8 +17,7 @@
 </div>
 
 <div class="container" style="margin-top:30px;">
-	<h3>Hover (mouseenter) and touch (mobile):</h3>
-	<p>🚧 Not mobile/touch-optimized yet. 🚧</p>
+	<h3>Hover (mouseenter), touch on mobile:</h3>
 </div>
 
 <DisclosureNavigation useHoverActions={true} />
@@ -27,7 +26,7 @@
 	<DisclosureNavigation useHoverActions={true} />
 </div>
 
-<div class="container" style="margin-top:30px;"><h3>Click only:</h3></div>
+<div class="container" style="margin-top:30px;"><h3>Click/touch only, no hovering:</h3></div>
 
 <DisclosureNavigation useHoverActions={false} />
 
