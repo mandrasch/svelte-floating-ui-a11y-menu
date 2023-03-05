@@ -80,6 +80,7 @@
 
 	// On mobile side calling preventDefault in touchstart event prevents mouseover,
 	// mouseenter, mousedown and affiliated events (we use on:touchstart|preventDefault)
+	// https://web.dev/mobile-touchandmouse/
 	function handleDropdownTouchstart(evt, menuName) {
 		console.log('[handleDropdownTouchstart()]', { evt, menuName });
 		toggleSubmenu(menuName, evt);
@@ -170,7 +171,7 @@
 			<!-- https://svelte.dev/tutorial/inline-handlers -->
 			<li on:mouseleave={(evt) => handleDropdownMouseleave(evt)}>
 				<!-- important, use |stopPropagation|preventDefault otherwise events will be triggered twice (e.g. click mobile => mouseenter) -->
-				<!-- important:On mobile side calling preventDefault in touchstart event prevents mouseover, mouseenter, mousedown and affiliated events https://stackoverflow.com/a/37130354-->
+				<!-- important:On mobile side calling preventDefault in touchstart event prevents mouseover, mouseenter, mousedown and affiliated event, see: https://stackoverflow.com/a/37130354 and https://web.dev/mobile-touchandmouse/-->
 				<button
 					type="button"
 					aria-controls="submenu_news"

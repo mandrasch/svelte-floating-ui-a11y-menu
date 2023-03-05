@@ -14,16 +14,15 @@ Live demo: https://svelte-floating-ui-a11y-menu.vercel.app/
 
 ## TODOs
 
-- [ ] Goal: Make hover work on iPads / big touch screen as well without need of collapsing the menu?
+- [ ] Add https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation-hybrid/#mythical-page-content example with top level links
+- [x] Goal: Make hover work on iPads / big touch screen as well without need of collapsing the menu?
 - [ ] Read https://adrianroselli.com/2019/06/link-disclosure-widget-navigation.html
-- [ ] Use all keyboard events of https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html
-- [ ] Add https://www.npmjs.com/package/svelte-click-outside for closing
+- [ ] Use all keyboard events (arrow up, down) of https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html
+- [x] Add https://www.npmjs.com/package/svelte-click-outside for closing
 - [ ] Add collapsible mobile menu
-- [ ] Add example where link and dropdown toggle are separated so that parent link can be clicked
-- [ ] Implement other patterns
 - [ ] Test with screenreader(s)!
-- [ ] Get feedback by a11y experts
-- [ ] Set focus properly
+- [ ] Get feedback by a11y experts!
+- [ ] Set focus properly?
 - [ ] Fix contrast errors
 
 ## Technical
@@ -33,6 +32,7 @@ Live demo: https://svelte-floating-ui-a11y-menu.vercel.app/
 ## Resources
 
 - Why JS positioning for dropdowns? https://blog.logrocket.com/popper-vs-floating-ui/
+- Cancel in `touchstart` events to not trigger click events as well https://web.dev/mobile-touchandmouse/
 - Related: https://github.com/picocss/pico/issues/330 (thx to @matuzo!)
 - https://w3c.github.io/aria-practices/examples/menubar/menubar-navigation.html
 - Maybe relevant in future: https://github.com/jguze/svelte-easy-popover/pull/4
