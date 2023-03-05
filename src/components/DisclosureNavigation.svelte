@@ -7,7 +7,7 @@
 	import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 	// https://svelte.dev/repl/814c27da2e1344f9b4f205a93e02559f?version=3.38.1
-	let activeMenu = ''; // TODO: get first state?
+	$: activeMenu = ''; // TODO: good first state?
 
 	// props and menuSettings
 	export let useHoverActions = true;
@@ -36,10 +36,17 @@
 	}
 
 	async function toggleDropdownByClick(evt, menuName) {
-		console.log('toggleDropdownByClick()', { menuName, target: evt.target });
+		console.log('toggleDropdownByClick()', { menuName, activeMenu, target: evt.target });
 
-		if (activeMenu != menuName) {
+		// TODO: clashes with openByClick() - how to bundle / synchronize them?
+		if (menuSettings.useHoverActions === true) {
+			console.log('toggleDropdownByClick() - exit, hover actions will take care');
+			return; // bail
+		}
+
+		if (activeMenu !== menuName) {
 			// Show submenu
+			console.log('toggleDropdownByClick()', 'show submenu');
 			activeMenu = menuName;
 
 			// Wait for animations / template changes by Svelte {#if}
@@ -65,6 +72,7 @@
 				computeBestPositionForDropdownContent
 			);
 		} else {
+			console.log('hide submenu');
 			// hide submenu
 			activeMenu = '';
 			// destroy / remove auto update listener
@@ -73,8 +81,14 @@
 	}
 
 	async function openDropdownByHover(evt, menuName) {
-		if (menuSettings.useHoverActions === false) return; // bail
+		console.log('openDrodownByHover()', { evt, menuName });
+		if (menuSettings.useHoverActions === false) {
+			console.log('openDrodownByHover() - exit no hover actions activated');
+			return; // bail
+		}
 
+		// TODO: bundle this in openMenu()
+		// if hover actions are permitted:
 		activeMenu = menuName;
 
 		// Wait for animations / template changes by Svelte {#if}
@@ -90,7 +104,11 @@
 			console.error('Could not find ul-submenu in target area:', evt.target.closest('li'));
 		}
 
-		console.log(currentSelectedDropdownToggle, currentSelectedDropdownContent);
+		console.log(
+			'openDrodownByHover()',
+			currentSelectedDropdownToggle,
+			currentSelectedDropdownContent
+		);
 
 		// https://floating-ui.com/docs/autoUpdate
 		currentSelectedDropdownAutoUpdateFn = autoUpdate(
@@ -136,7 +154,7 @@
 					type="button"
 					aria-controls="submenu_news"
 					aria-expanded={activeMenu === 'news'}
-					on:click={(evt) => toggleDropdownByClick(evt, 'news')}
+					on:click|stopPropagation={(evt) => toggleDropdownByClick(evt, 'news')}
 					on:mouseenter={(evt) => openDropdownByHover(evt, 'news')}
 					>News
 					<svg
@@ -199,10 +217,16 @@
 			</li>
 		</ul>
 	</nav>
-	<p>Active menu: {activeMenu}</p>
+	<p>Active menu: {JSON.stringify(activeMenu)}</p>
 </div>
 
 <style>
+	/* Important! */
+	/* https://css-tricks.com/slightly-careful-sub-elements-clickable-things/ */
+	:global(button > *) {
+		pointer-events: none;
+	}
+
 	.nav-demo-container {
 		border: 2px dotted var(--primary);
 		margin-bottom: 20px;

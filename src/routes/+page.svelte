@@ -17,7 +17,7 @@
 </div>
 
 <div class="container" style="margin-top:30px;">
-	<h3>Hover (mouseenter) and click:</h3>
+	<h3>Hover (mouseenter) and touch (mobile):</h3>
 	<p>🚧 Not mobile/touch-optimized yet. 🚧</p>
 </div>
 
