@@ -1,7 +1,10 @@
 <script lang="ts">
 	import '../app.scss';
+	import GithubCorner from '../components/GithubCorner.svelte';
 </script>
 
-<div class="container">
+<div>
 	<slot />
 </div>
+
+<GithubCorner />

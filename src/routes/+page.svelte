@@ -1,35 +1,43 @@
-<!-- <script>
-	// TODO: Learn how to import a local popover
-	import { Popover } from './dist/popover';
-
-	let referenceElement;
+<script>
+	import DisclosureNavigation from '../components/DisclosureNavigation.svelte';
 </script>
 
-<button bind:this={referenceElement}>Open popover</button>
-<Popover triggerEvents={['hover', 'focus']} {referenceElement} placement="top" spaceAway={10}>
-	<div class="popover-contents" transition:fade={{ duration: 250 }}>I'm a popover!</div>
-</Popover>
+<div class="container" style="margin-top:30px;">
+	<h2>Disclosure navigation example</h2>
+
+	<p>
+		Svelte menu based on <a
+			href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/"
+			>WAI Example Disclosure Navigation Menu
+		</a>
+		and <a href="https://floating-ui.com/">Floating UI</a>, see
+		<a href="https://github.com/mandrasch/sveltekit-floating-ui-a11y-menu">GitHub</a> for details.
+	</p>
+	<p>🚧 Work in progress, do not use in production without testing 🚧</p>
+	<h3>Hover (mouseenter) and click:</h3>
+</div>
+
+<DisclosureNavigation useHoverActions={true} />
+
+<div class="container" style="margin-top:30px;">
+	<DisclosureNavigation useHoverActions={true} />
+</div>
+
+<div class="container" style="margin-top:30px;"><h3>Click only:</h3></div>
+
+<DisclosureNavigation useHoverActions={false} />
+
+<div class="container">
+	<DisclosureNavigation useHoverActions={false} />
+</div>
+
+<div class="footer">
+	<a href="https://matthias-andrasch.eu/blog/impressum-datenschutz/">Imprint & privacy</a>
+</div>
 
 <style>
-	.popover-contents {
-		border: 1px solid black;
-		border-radius: 4px;
-		padding: 8px;
+	.footer {
+		margin-top: 50px;
+		text-align: center;
 	}
 </style>
--->
-<script>
-	import NavigationHover from '../components/NavigationHover.svelte';
-	import NavigationClickOnly from '../components/NavigationClickOnly.svelte';
-</script>
-
-<h2>SvelteKit + floating-ui a11y menus</h2>
-<p>
-	See <a href="https://github.com/mandrasch/sveltekit-floatingui-a11y-menu">GitHub</a>.
-</p>
-
-<h3>Hover + click:</h3>
-<NavigationHover />
-
-<h3>Click only:</h3>
-<NavigationClickOnly />
