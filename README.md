@@ -29,13 +29,13 @@ Experimental, do not use this in production without serious a11y testing!
 ## Resources
 
 - Why JS positioning for dropdowns? https://blog.logrocket.com/popper-vs-floating-ui/
-- Related: https://github.com/picocss/pico/issues/330
+- Related: https://github.com/picocss/pico/issues/330 (thx to @matuzo!)
 - https://w3c.github.io/aria-practices/examples/menubar/menubar-navigation.html
 - Maybe relevant in future: https://github.com/jguze/svelte-easy-popover/pull/4
 - For Vanilla JS: https://github.com/NickDJM/accessible-menu
 - https://bholmes.dev/blog/building-a-sexy-mobile-ready-navbar-in-any-web-framework/
 - https://bholmes.dev/blog/accessible-show-hide-animations/
-- Practical example: https://www.wien.gv.at/spezial/cd-manual/
+- Practical example (not mine): https://www.wien.gv.at/spezial/cd-manual/
 
 ## How was this created
 
