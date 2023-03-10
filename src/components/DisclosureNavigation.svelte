@@ -13,7 +13,7 @@
 	import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
 
 	// https://svelte.dev/repl/814c27da2e1344f9b4f205a93e02559f?version=3.38.1
-	$: activeMenu = ''; // TODO: good first state?
+	$: activeMenu = ''; // TODO: good first state? Is $: needed?
 
 	// props and menuSettings
 	export let useHoverActions = true;
@@ -30,8 +30,20 @@
 	let currentSelectedDropdownAutoUpdateFn = function () {}; // for clean up later
 	let autoUpdateFns = [];
 
-	// https://floating-ui.com/docs/autoUpdate
+	onMount(() => {
+		function onResize() {
+			innerWidth = window.innerWidth;
+			// console.log('resizeEvent', window.innerWidth);
+			// TODO: use var for breakpoint (how can we use vars via Svelte in CSS as well?)
+			if (innerWidth > 992 && document.body.classList.contains('disclosure-nav-scroll-lock')) {
+				document.body.classList.remove('disclosure-nav-scroll-lock'); // re-enable scrolling
+			}
+		}
+		window.addEventListener('resize', onResize);
+		return () => window.removeEventListener('resize', onResize); // called when destroyed
+	});
 
+	// https://floating-ui.com/docs/autoUpdate
 	function computeBestPositionForDropdownContent() {
 		console.log('computeBestPositionForDropdownContent() triggered');
 		computePosition(currentSelectedDropdownToggle, currentSelectedDropdownContent, {
@@ -168,6 +180,8 @@
 	let mobileMenuRef;
 	async function handleHamburgerClick() {
 		mobileMenuOpen = !mobileMenuOpen;
+		document.body.classList.add('disclosure-nav-scroll-lock');
+
 		document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'auto'; // scroll lock
 
 		await tick(); // wait for animation to be finished
@@ -180,7 +194,7 @@
 
 	function handleMobileOverlayCloseClick() {
 		mobileMenuOpen = false;
-		document.body.style.overflow = 'auto'; // re-enable scroll
+		document.body.classList.remove('disclosure-nav-scroll-lock'); // re-enable scroll
 		// TODO: remove focus trap
 	}
 </script>
@@ -372,6 +386,11 @@
 	/* https://css-tricks.com/slightly-careful-sub-elements-clickable-things/ */
 	:global(button > *) {
 		pointer-events: none;
+	}
+
+	/* helper for body (when mobile overlay is opened) */
+	:global(.disclosure-nav-scroll-lock) {
+		overflow: 'hidden';
 	}
 
 	/* https://stackoverflow.com/a/73391142 */
