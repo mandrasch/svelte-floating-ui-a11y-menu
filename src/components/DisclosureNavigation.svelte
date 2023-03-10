@@ -181,9 +181,6 @@
 	async function handleHamburgerClick() {
 		mobileMenuOpen = !mobileMenuOpen;
 		document.body.classList.add('disclosure-nav-scroll-lock');
-
-		document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'auto'; // scroll lock
-
 		await tick(); // wait for animation to be finished
 
 		console.log({ mobileMenuRef });
