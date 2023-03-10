@@ -24,6 +24,7 @@ Live demo: https://svelte-floating-ui-a11y-menu.vercel.app/
 
 - [ ] Add focus styles for mobile menu
 - [ ] Improve focus styles
+- [ ] Add current active link and mark it with `aria-current=`
 - [ ] Add focus trap for mobile menu overlay (https://www.npmjs.com/package/svelte-focus-trap ?)
 - [ ] Use all keyboard events (arrow up, down) of https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html
 - [ ] Integrate [Example Disclosure Navigation Menu with Top-Level Links](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation-hybrid/)
