@@ -22,15 +22,16 @@ Live demo: https://svelte-floating-ui-a11y-menu.vercel.app/
 
 ## TODOs
 
-- [ ] Integrate [Example Disclosure Navigation Menu with Top-Level Links](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation-hybrid/)
-- Add https://www.npmjs.com/package/svelte-focus-trap ?
-- Handle all resize cases and hide menus if menus switch between mobile & desktop?
-- [ ] Read https://adrianroselli.com/2019/06/link-disclosure-widget-navigation.html
+- [ ] Add focus styles for mobile menu
+- [ ] Improve focus styles
+- [ ] Add focus trap for mobile menu overlay (https://www.npmjs.com/package/svelte-focus-trap ?)
 - [ ] Use all keyboard events (arrow up, down) of https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html
-
-- [ ] Get feedback by a11y experts!
-- [ ] Set focus properly?
+- [ ] Integrate [Example Disclosure Navigation Menu with Top-Level Links](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation-hybrid/)
+- [ ] Check if Floating UI autoUpdater was written reliable and dumps all old listeners / switch to Svelte solution for resize / scrolling detection?
+- Bonus: Handle all resize cases and hide menus if menus switch between mobile & desktop?
+- [ ] Read https://adrianroselli.com/2019/06/link-disclosure-widget-navigation.html
 - [ ] Fix contrast errors
+- [ ] Get feedback by a11y experts!
 
 ## Technical information
 
