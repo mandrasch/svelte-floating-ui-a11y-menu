@@ -12,6 +12,14 @@ Live demo: https://svelte-floating-ui-a11y-menu.vercel.app/
 - `npm install`
 - `npm run dev -- --open`
 
+## Storybook v7 integration
+
+- `npm run storybook`
+
+- https://storybook.js.org/blog/storybook-for-sveltekit/
+- (not compatible yet) https://storybook.js.org/addons/@storybook/addon-svelte-csf
+- https://mvolkmann.github.io/blog/svelte/storybook/?v=1.0.15
+
 ## TODOs
 
 - [ ] Add https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation-hybrid/#mythical-page-content example with top level links
@@ -27,9 +35,11 @@ Live demo: https://svelte-floating-ui-a11y-menu.vercel.app/
 - [ ] Set focus properly?
 - [ ] Fix contrast errors
 
-## Technical
+## Technical information
 
-- I did not `{#if activeMenu == 'news'}` around `<ul>`-submenus, because this removes submenus temporarily completely from DOM. I wasn't sure if this was okay with aria-controls= references (https://stackoverflow.com/a/73391142). Drawback is, that you can't use Svelte animations like `in:fly={{ y: -10 }}` on these submenus. See https://github.com/sveltejs/svelte/pull/7932 for more details.
+I did not use `{#if activeMenu == 'news'}` around `<ul>`-submenus, because this removes submenus temporarily completely from DOM. I wasn't sure if this was okay with aria-controls= references (https://stackoverflow.com/a/73391142). Drawback is, that you can't use Svelte animations like `in:fly={{ y: -10 }}` on these submenus.
+
+Instead I used a `.hide`-class (provided by [Foxeye.Rinx](https://stackoverflow.com/questions/58546496/v-show-alternative-for-svelte/73391142#73391142)), this does not remove elements from DOM. See [feat: svelte-display directive #6336 #7932](https://github.com/sveltejs/svelte/pull/7932) for more details.
 
 ## Resources
 
