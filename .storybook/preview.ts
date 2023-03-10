@@ -1,5 +1,8 @@
 import type { Preview } from '@storybook/svelte';
 
+// add styling
+import '../src/app.scss';
+
 const preview: Preview = {
 	parameters: {
 		backgrounds: {
