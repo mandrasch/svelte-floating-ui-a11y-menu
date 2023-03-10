@@ -6,7 +6,7 @@
 	// https://github.com/sveltejs/svelte/pull/7932
 
 	// Only needed for {#if}, currently not used
-	//import { tick } from 'svelte';
+	import { tick, onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 
 	// floating-ui
@@ -150,9 +150,9 @@
 		window.addEventListener('click', handleClick);
 
 		function handleClick(e) {
-			console.log({ node, target: e.target });
+			// console.log({ node, target: e.target });
 			if (!node.contains(e.target) || !node.equals(e.target)) {
-				console.log('DISPATCHING!', { node, target: e.target });
+				// console.log('DISPATCHING!', { node, target: e.target });
 				node.dispatchEvent(new CustomEvent('outsideclick'));
 			}
 		}
@@ -165,9 +165,16 @@
 		};
 	}
 	let mobileMenuOpen = false;
-	function handleHamburgerClick() {
+	let mobileMenuRef;
+	async function handleHamburgerClick() {
 		mobileMenuOpen = !mobileMenuOpen;
 		document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'auto'; // scroll lock
+
+		await tick(); // wait for animation to be finished
+
+		console.log({ mobileMenuRef });
+		mobileMenuRef && mobileMenuRef.querySelector('a').focus();
+
 		// TODO: add focus trap
 	}
 
@@ -184,12 +191,12 @@
 <nav
 	class="disclosure-nav"
 	class:isCollapsible={menuSettings.isCollapsible}
-	aria-label="Mythical University"
+	aria-label="The demo company"
 >
 	<a href="/" class="disclosure-nav__brand">The demo company</a>
 	<!-- Desktop menu with CSS transitions -->
 	<div class="disclosure-nav__container-desktop">
-		<ul class="disclosure-nav__container-desktop__nav-list" aria-label="Mythical University">
+		<ul class="disclosure-nav__container-desktop__nav-list" aria-label="The demo company">
 			<li>
 				<a href="#home"> Home </a>
 			</li>
@@ -286,7 +293,8 @@
 					<button on:click|preventDefault={handleMobileOverlayCloseClick}>Close</button>
 					<ul
 						class="disclosure-nav__container-mobile__overlay__nav-list"
-						aria-label="Mythical University"
+						aria-label="The demo company"
+						bind:this={mobileMenuRef}
 					>
 						<li>
 							<a href="#home"> Home </a>
