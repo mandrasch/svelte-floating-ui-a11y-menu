@@ -186,7 +186,7 @@
 	class:isCollapsible={menuSettings.isCollapsible}
 	aria-label="Mythical University"
 >
-	<a href="/">The demo company</a>
+	<a href="/" class="disclosure-nav__brand">The demo company</a>
 	<!-- Desktop menu with CSS transitions -->
 	<div class="disclosure-nav__container-desktop">
 		<ul class="disclosure-nav__container-desktop__nav-list" aria-label="Mythical University">
@@ -375,7 +375,7 @@
 
 	/* the general container */
 	nav.disclosure-nav {
-		border: 2px dotted var(--primary);
+		border: 3px solid var(--primary);
 		margin-bottom: 20px;
 		display: flex;
 		flex-direction: row;
@@ -383,6 +383,9 @@
 		align-items: center;
 	}
 
+	.disclosure-nav__brand {
+		margin: 5px;
+	}
 	/* 
 		============================
 		========= DESKTOP ==========
@@ -428,7 +431,7 @@
 	/* Only show/hide menus if menu has isCollapsible */
 	@media screen and (max-width: 992px) {
 		.disclosure-nav.isCollapsible .disclosure-nav__container-mobile {
-			display: block;
+			display: flex;
 		}
 		.disclosure-nav.isCollapsible .disclosure-nav__container-desktop {
 			display: none;
@@ -437,6 +440,12 @@
 
 	.disclosure-nav__container-mobile {
 		display: none;
+		display: flex;
+		align-items: center;
+	}
+
+	.disclosure-nav-container__hamburger {
+		margin: 10px 10px;
 	}
 
 	.disclosure-nav__container-mobile__overlay {
