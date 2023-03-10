@@ -17,13 +17,23 @@
 </div>
 
 <div class="container" style="margin-top:30px;">
-	<h3>Hover (mouseenter), touch on mobile:</h3>
+	<h3>Hover (mouseenter), touch on mobile / tables:</h3>
 </div>
 
+<h4>Collapsed on mobile</h4>
 <DisclosureNavigation useHoverActions={true} />
 
+<h4>Not collapsed on mobile</h4>
+<DisclosureNavigation isCollapsible={false} useHoverActions={true} />
+
+<h4>Boxed, collapsible</h4>
 <div class="container" style="margin-top:30px;">
 	<DisclosureNavigation useHoverActions={true} />
+</div>
+
+<h4>Boxed, collapsible: false</h4>
+<div class="container" style="margin-top:30px;">
+	<DisclosureNavigation isCollapsible={false} useHoverActions={true} />
 </div>
 
 <div class="container" style="margin-top:30px;"><h3>Click/touch only, no hovering:</h3></div>
@@ -41,6 +51,10 @@
 <style>
 	.footer {
 		margin-top: 50px;
+		text-align: center;
+	}
+	h3,
+	h4 {
 		text-align: center;
 	}
 </style>

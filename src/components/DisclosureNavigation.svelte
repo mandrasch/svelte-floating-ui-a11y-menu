@@ -1,7 +1,13 @@
 <script>
+	// Important part about this menu is that we can't rely purely
+	// on {#if}, since it removes elements from DOM. Therefore tags
+	// like aria-controls="#<id>" can't be used with {#if} properly.
+	// We use .hide for that as helper class, it's like v-if in vue.
+	// https://github.com/sveltejs/svelte/pull/7932
+
 	// Only needed for {#if}, currently not used
 	//import { tick } from 'svelte';
-	// import { fade, fly } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 
 	// floating-ui
 	import { computePosition, flip, shift, offset, autoUpdate } from '@floating-ui/dom';
@@ -11,8 +17,11 @@
 
 	// props and menuSettings
 	export let useHoverActions = true;
+	export let isCollapsible = true;
+
 	const menuSettings = {
-		useHoverActions
+		useHoverActions,
+		isCollapsible
 	};
 
 	// the current selected elements
@@ -52,7 +61,7 @@
 			currentSelectedDropdownToggle = evt.target;
 			currentSelectedDropdownContent = evt.target
 				.closest('li')
-				.querySelector('ul.disclosure-nav__submenu');
+				.querySelector('ul.disclosure-nav-container__navigation-list__submenu');
 
 			if (currentSelectedDropdownContent === null) {
 				console.error('Could not find ul-submenu in target area:', evt.target.closest('li'));
@@ -155,16 +164,32 @@
 			}
 		};
 	}
+	let mobileMenuOpen = false;
+	function handleHamburgerClick() {
+		mobileMenuOpen = !mobileMenuOpen;
+		document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'auto'; // scroll lock
+		// TODO: add focus trap
+	}
+
+	function handleMobileOverlayCloseClick() {
+		mobileMenuOpen = false;
+		document.body.style.overflow = 'auto'; // re-enable scroll
+		// TODO: remove focus trap
+	}
 </script>
 
 <!-- https://svelte.dev/tutorial/svelte-window -->
 <svelte:window on:keydown={handleKeydown} />
 
-<div class="nav-demo-container">
-	<nav aria-label="Mythical University">
-		<a href="/">The demo company</a>
-
-		<ul class="disclosure-nav" aria-label="Mythical University">
+<nav
+	class="disclosure-nav"
+	class:isCollapsible={menuSettings.isCollapsible}
+	aria-label="Mythical University"
+>
+	<a href="/">The demo company</a>
+	<!-- Desktop menu with CSS transitions -->
+	<div class="disclosure-nav__container-desktop">
+		<ul class="disclosure-nav__container-desktop__nav-list" aria-label="Mythical University">
 			<li>
 				<a href="#home"> Home </a>
 			</li>
@@ -193,7 +218,11 @@
 						<polygon points="1 0, 11 0, 6 8" />
 					</svg></button
 				>
-				<ul id="submenu_news" class="disclosure-nav__submenu" class:hide={activeMenu !== 'news'}>
+				<ul
+					id="submenu_news"
+					class="disclosure-nav-container__navigation-list__submenu"
+					class:hide={activeMenu !== 'news'}
+				>
 					<li>
 						<a href="overview"> Overview </a>
 					</li>
@@ -224,7 +253,11 @@
 						<polygon points="1 0, 11 0, 6 8" />
 					</svg></button
 				>
-				<ul id="submenu_about" class="disclosure-nav__submenu" class:hide={activeMenu !== 'about'}>
+				<ul
+					id="submenu_about"
+					class="disclosure-nav-container__navigation-list__submenu"
+					class:hide={activeMenu !== 'about'}
+				>
 					<li>
 						<a href="#overview"> Our organisation </a>
 					</li>
@@ -234,9 +267,97 @@
 				</ul>
 			</li>
 		</ul>
-	</nav>
-	<p>Active menu: {JSON.stringify(activeMenu)}</p>
-</div>
+	</div>
+	<!-- Mobile menu with Svelte transitions (via {#if}), only
+		uses click / touch actions. Separathed mobile from desktop
+		for easier separation of concerns. 
+	-->
+	{#if isCollapsible}
+		<div class="disclosure-nav__container-mobile">
+			<button class="disclosure-nav-container__hamburger" on:click={handleHamburgerClick}
+				>Menu</button
+			>
+			{#if mobileMenuOpen}
+				<div
+					class="disclosure-nav__container-mobile__overlay"
+					in:fly={{ x: 500, duration: 1000 }}
+					out:fade
+				>
+					<button on:click|preventDefault={handleMobileOverlayCloseClick}>Close</button>
+					<ul
+						class="disclosure-nav__container-mobile__overlay__nav-list"
+						aria-label="Mythical University"
+					>
+						<li>
+							<a href="#home"> Home </a>
+						</li>
+						<!-- https://svelte.dev/tutorial/inline-handlers -->
+						<li>
+							<!-- important, use |stopPropagation|preventDefault otherwise events will be triggered twice (e.g. click mobile => mouseenter) -->
+							<!-- important:On mobile side calling preventDefault in touchstart event prevents mouseover, mouseenter, mousedown and affiliated event, see: https://stackoverflow.com/a/37130354 and https://web.dev/mobile-touchandmouse/-->
+							<button
+								type="button"
+								aria-controls="submenu_news"
+								aria-expanded={activeMenu === 'news'}
+								on:touchstart|preventDefault={(evt) => handleDropdownTouchstart(evt, 'news')}
+								on:click|stopPropagation|preventDefault={(evt) => handleDropdownClick(evt, 'news')}
+								>News
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="down"
+									width="12"
+									height="9"
+									viewBox="0 0 12 9"
+								>
+									<polygon points="1 0, 11 0, 6 8" />
+								</svg></button
+							>
+							<ul id="submenu_news" class:hide={activeMenu !== 'news'}>
+								<li>
+									<a href="overview"> Overview </a>
+								</li>
+								<li>
+									<a href="#administration"> Tech news </a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<button
+								type="button"
+								aria-controls="submenu_about"
+								aria-expanded={activeMenu === 'about'}
+								on:touchstart|stopPropagation|preventDefault={(evt) =>
+									handleDropdownTouchstart(evt, 'about')}
+								on:click|stopPropagation|preventDefault={(evt) => handleDropdownClick(evt, 'about')}
+								>About
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="down"
+									width="12"
+									height="9"
+									viewBox="0 0 12 9"
+								>
+									<polygon points="1 0, 11 0, 6 8" />
+								</svg></button
+							>
+							<ul id="submenu_about" class:hide={activeMenu !== 'about'}>
+								<li>
+									<a href="#overview"> Our organisation </a>
+								</li>
+								<li>
+									<a href="#administration"> Why a11y matters</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<p>Active menu: {JSON.stringify(activeMenu)}</p>
+				</div>
+			{/if}
+		</div>
+	{/if}
+</nav>
+<!-- Just for debug:-->
+<p>Active menu: {JSON.stringify(activeMenu)}</p>
 
 <style>
 	/* Important! */
@@ -245,43 +366,42 @@
 		pointer-events: none;
 	}
 
-	.nav-demo-container {
-		border: 2px dotted var(--primary);
-		margin-bottom: 20px;
-	}
-
 	/* https://stackoverflow.com/a/73391142 */
 	.hide {
 		opacity: 0 !important;
 		visibility: hidden !important;
+		height: 0px;
 	}
 
-	nav {
+	/* the general container */
+	nav.disclosure-nav {
+		border: 2px dotted var(--primary);
+		margin-bottom: 20px;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
 	}
 
-	/* main menu */
-	ul.disclosure-nav {
+	/* 
+		============================
+		========= DESKTOP ==========
+		============================
+	*/
+	ul.disclosure-nav__container-desktop__nav-list {
 		list-style-type: none;
 		display: flex;
 		flex-direction: row;
 		justify-content: end;
-	}
-	/* main menu child */
-	ul.disclosure-nav li {
 		margin: 10px;
 	}
 
 	/* submenu (dropdowns) */
-	ul.disclosure-nav__submenu {
+	ul.disclosure-nav__container-desktop__nav-list ul {
 		/* https://bholmes.dev/blog/accessible-show-hide-animations/ */
 		opacity: 1;
 		visibility: visible;
 		transition: opacity 0.8s, visibility 0.8s;
-
 		list-style-type: none;
 		background: lightblue;
 		width: max-content;
@@ -293,9 +413,59 @@
 	}
 
 	/* just some styling, remove default button styles by picocss */
-	ul.disclosure-nav button {
+	ul.disclosure-nav__container-desktop__nav-list button {
 		background: none;
 		border: none;
 		color: var(--primary);
+	}
+
+	/* 
+		============================
+		========== MOBILE ==========
+		============================
+	*/
+
+	/* Only show/hide menus if menu has isCollapsible */
+	@media screen and (max-width: 992px) {
+		.disclosure-nav.isCollapsible .disclosure-nav__container-mobile {
+			display: block;
+		}
+		.disclosure-nav.isCollapsible .disclosure-nav__container-desktop {
+			display: none;
+		}
+	}
+
+	.disclosure-nav__container-mobile {
+		display: none;
+	}
+
+	.disclosure-nav__container-mobile__overlay {
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		background-color: var(--secondary);
+		color: white;
+	}
+	.disclosure-nav__container-mobile__overlay p,
+	.disclosure-nav__container-mobile__overlay a {
+		color: white;
+	}
+
+	.disclosure-nav__container-mobile__overlay__nav-list {
+		display: flex;
+		justify-content: start;
+		flex-direction: column;
+		list-style-type: none;
+	}
+
+	/* submenus */
+	.disclosure-nav__container-mobile__overlay__nav-list ul {
+		flex-direction: column;
+	}
+
+	.disclosure-nav__container-mobile__overlay__nav-list li {
+		width: 100%;
 	}
 </style>

@@ -16,6 +16,7 @@ Live demo: https://svelte-floating-ui-a11y-menu.vercel.app/
 
 - [ ] Add https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation-hybrid/#mythical-page-content example with top level links
 - [ ] Decide whether to use `activeMenu` or compare with `equalNode()` to check if we clicked/touched the currently opened menu (avoid duplication)
+  - Use https://gomakethings.com/custom-events-with-vanilla-js/ for handleOutsideClick()?
 - [x] Goal: Make hover work on iPads / big touch screen as well without need of collapsing the menu?
 - [ ] Read https://adrianroselli.com/2019/06/link-disclosure-widget-navigation.html
 - [ ] Use all keyboard events (arrow up, down) of https://w3c.github.io/aria-practices/examples/disclosure/disclosure-navigation.html
