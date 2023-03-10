@@ -440,7 +440,6 @@
 
 	.disclosure-nav__container-mobile {
 		display: none;
-		display: flex;
 		align-items: center;
 	}
 
