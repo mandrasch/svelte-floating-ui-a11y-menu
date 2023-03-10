@@ -11,7 +11,7 @@
 			>WAI Example Disclosure Navigation Menu
 		</a>
 		and <a href="https://floating-ui.com/">Floating UI</a>, see
-		<a href="https://github.com/mandrasch/sveltekit-floating-ui-a11y-menu">GitHub</a> for all details.
+		<a href="https://github.com/mandrasch/svelte-floating-ui-a11y-menu">GitHub</a> for all details.
 	</p>
 	<p>🚧 Work in progress, do not use in production without testing! 🚧</p>
 </div>
